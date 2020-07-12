@@ -55,8 +55,15 @@ export const chatHandler = async (message) => {
     await respondMessage(message, response);
   }
 
+  if (message.content.startsWith(`${PREFIX}order`)) {
+    const order = message.content.split(`${PREFIX}order`)[1];
+    const response = `${order}, ${returnRandomItem(messages.orderResponses)}`;
+    await playMessage(connection, response);
+    await respondMessage(message, response);
+  }
+
   if (message.content.startsWith(`${PREFIX}menu`)) {
-    const response = `For today's menu we have <break time="700ms"/>: ${returnRandomItem(
+    const response = `For today's menu we have<break time="700ms"/>: ${returnRandomItem(
       messages.menuItems
     )} <break time="700ms"/>, ${returnRandomItem(
       messages.menuItems
