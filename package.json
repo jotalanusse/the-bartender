@@ -1,0 +1,43 @@
+{
+  "name": "the-bartender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/server.js",
+  "scripts": {
+    "build": "rm -rf lib && babel src --out-dir lib --copy-files --source-maps",
+    "start-inspect": "node --inspect --require dotenv/config lib/index.js",
+    "start": "node --require dotenv/config lib/index.js",
+    "watch-build": "babel src --out-dir lib --watch --copy-files --source-maps",
+    "watch-start": "nodemon -w lib --exec \"npm run start\"",
+    "update-packages": "ncu -u && npm install"
+  },
+  "author": "jotalanusse",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.2",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "ffmpeg": "0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "text2wav": "0.0.13",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4",
+    "npm-check-updates": "^7.0.1",
+    "prettier": "^2.0.5"
+  }
+}
