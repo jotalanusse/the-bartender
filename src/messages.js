@@ -33,6 +33,17 @@ export default {
     'sad faces',
     'suicide daikiris',
   ],
+  voiceConnectionRequired: [
+    "I can't help you if you are not connected to any voice channel",
+    'You need to be in a voice channel to use this command, mate',
+    'Please connect to a voice channel first',
+    'It would be easier for both of us if you connected to a voice channel first',
+  ],
+  unknownCommand: [
+    "I don't understand what you are saying",
+    'Please try with another command, mate',
+    'What are you talking about?',
+  ],
   tip: [
     'Thank you for your money',
     'Now I can finally pay rent',

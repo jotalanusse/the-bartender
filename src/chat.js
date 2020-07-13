@@ -1,6 +1,7 @@
 /* Modules and files */
 import logger from './helpers/logger';
 import { playMessage } from './voice';
+// import { playSong } from './music';
 
 /* Messages */
 import messages from './messages';
@@ -29,40 +30,41 @@ export const chatHandler = async (message) => {
   logger.debug(`New message [${message}]`);
 
   const voiceChannel = message.member.voice.channel;
-  const connection = await voiceChannel.join();
+  let connection;
+
+  if (voiceChannel) {
+    connection = await voiceChannel.join();
+  } else {
+    logger.debug('There is no channel for The Bartender to connect to');
+  }
 
   if (message.content.startsWith(`${PREFIX}test`)) {
     const response = returnRandomItem(messages.test);
     await playMessage(connection, response);
     await respondMessage(message, response);
-  }
-
-  if (message.content.startsWith(`${PREFIX}join`)) {
+  } else if (message.content.startsWith(`${PREFIX}join`)) {
+    if (!voiceChannel) {
+      await respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
+    }
     await playMessage(connection, returnRandomItem(messages.join));
-  }
-
-  if (message.content.startsWith(`${PREFIX}random`)) {
-    await playMessage(connection, returnRandomItem(messages.random));
-  }
-
-  if (message.content.startsWith(`${PREFIX}support`)) {
-    await playMessage(connection, returnRandomItem(messages.emotionalSupport));
-  }
-
-  if (message.content.startsWith(`${PREFIX}tip`)) {
+  } else if (message.content.startsWith(`${PREFIX}random`)) {
+    const response = returnRandomItem(messages.random);
+    await playMessage(connection, response);
+    await respondMessage(message, response);
+  } else if (message.content.startsWith(`${PREFIX}support`)) {
+    const response = returnRandomItem(messages.emotionalSupport);
+    await playMessage(connection, response);
+    await respondMessage(message, response);
+  } else if (message.content.startsWith(`${PREFIX}tip`)) {
     const response = returnRandomItem(messages.tip);
     await playMessage(connection, response);
     await respondMessage(message, response);
-  }
-
-  if (message.content.startsWith(`${PREFIX}order`)) {
+  } else if (message.content.startsWith(`${PREFIX}order`)) {
     const order = message.content.split(`${PREFIX}order`)[1];
     const response = `${order}, ${returnRandomItem(messages.orderResponses)}`;
     await playMessage(connection, response);
     await respondMessage(message, response);
-  }
-
-  if (message.content.startsWith(`${PREFIX}menu`)) {
+  } else if (message.content.startsWith(`${PREFIX}menu`)) {
     const response = `For today's menu we have<break time="700ms"/>: ${returnRandomItem(
       messages.menuItems
     )} <break time="700ms"/>, ${returnRandomItem(
@@ -70,5 +72,28 @@ export const chatHandler = async (message) => {
     )} <break time="700ms"/> and ${returnRandomItem(messages.menuItems)}`;
     await playMessage(connection, response);
     await respondMessage(message, response);
+  } else {
+    await respondMessage(message, returnRandomItem(messages.unknownCommand));
   }
+
+  /* Music section */
+  // if (message.content.startsWith(`${PREFIX}play`)) {
+  // if (!voiceChannel) {
+  //   await respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
+  // }
+
+  //   playSong(message);
+  // }
+
+  // if (message.content.startsWith(`${PREFIX}skip`)) {
+  //   // TODO: Add channel check
+
+  //   skip(message, serverQueue);
+  // }
+
+  // if (message.content.startsWith(`${PREFIX}stop`)) {
+  //   // TODO: Add channel check
+
+  //   stop(message, serverQueue);
+  // }
 };

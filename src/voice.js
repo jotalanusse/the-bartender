@@ -54,7 +54,13 @@ export const synthesizeVoice = async (text) => {
 };
 
 export const playMessage = async (connection, message) => {
-  const filePath = await synthesizeVoice(message);
-  logger.debug(`Playing voice file [${filePath}]`);
-  await connection.play(filePath, { volume: 1 });
+  if (!connection) {
+    logger.debug(
+      `The voice message won't be played because The Bartender is not on any voice channel`
+    );
+  } else {
+    const filePath = await synthesizeVoice(message);
+    logger.debug(`Playing voice file [${filePath}]`);
+    await connection.play(filePath, { volume: 1 });
+  }
 };

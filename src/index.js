@@ -14,6 +14,13 @@ if (!TOKEN) throw new Error('Missing TOKEN environment variable');
 // New Discord client
 const client = new Discord.Client();
 
+// Set a super awsome state
+client.on('ready', () => {
+  client.user.setActivity('with my feelings', {
+    type: 'PLAYING',
+  });
+});
+
 /* Main messages functionality */
 client.on('message', async (message) => {
   await chatHandler(message);
