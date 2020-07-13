@@ -6,7 +6,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install ffmpeg
-RUN snap install ffmpeg
+RUN apk add --no-cache ffmpeg
 
 # Install app dependencies
 COPY package.json /usr/src/app/
