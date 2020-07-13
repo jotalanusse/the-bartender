@@ -5,6 +5,9 @@ FROM node:12-alpine
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+# Install ffmpeg
+RUN snap install ffmpeg
+
 # Install app dependencies
 COPY package.json /usr/src/app/
 RUN npm install
