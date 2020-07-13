@@ -46,7 +46,7 @@ export const synthesizeVoice = async (text) => {
   });
 
   const voiceBuffer = Buffer.from(synthesizedVoice);
-  await appendFileSync(filePath, voiceBuffer);
+  appendFileSync(filePath, voiceBuffer);
 
   logger.debug(`Voice file [${filePath}] saved`);
 
@@ -61,6 +61,6 @@ export const playMessage = async (connection, message) => {
   } else {
     const filePath = await synthesizeVoice(message);
     logger.debug(`Playing voice file [${filePath}]`);
-    await connection.play(filePath, { volume: 1 });
+    connection.play(filePath, { volume: 1 });
   }
 };

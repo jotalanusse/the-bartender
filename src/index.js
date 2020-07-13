@@ -23,7 +23,7 @@ client.on('ready', () => {
 
 /* Main messages functionality */
 client.on('message', async (message) => {
-  await chatHandler(message);
+  chatHandler(message);
 });
 
 /* Status change messages */
