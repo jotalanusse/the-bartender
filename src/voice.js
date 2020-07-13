@@ -2,7 +2,7 @@
 import text2wav from 'text2wav';
 import { createHash } from 'crypto';
 import { join } from 'path';
-import { existsSync, mkdirSync, appendFileSync } from 'fs';
+import { existsSync, readdirSync, mkdirSync, appendFileSync } from 'fs';
 
 /* Modules and files */
 import logger from './helpers/logger';
@@ -21,7 +21,8 @@ if (!existsSync(VOICE_PATH)) {
   logger.debug(`Audio folder [${VOICE_PATH}] does not exists, creating one...`);
   mkdirSync(VOICE_PATH);
 } else {
-  logger.debug(`Audio folder [${VOICE_PATH}] found`);
+  const totalFiles = readdirSync(VOICE_PATH).length;
+  logger.debug(`Audio folder [${VOICE_PATH}] found with [${totalFiles}] files`);
 }
 
 /* Voice functionality */
