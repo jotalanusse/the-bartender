@@ -11,16 +11,11 @@ const { PREFIX } = process.env;
 
 if (!PREFIX) throw new Error('Missing PREFIX environment variable');
 
-/* Helpers */
-const returnRandomItem = (items) => {
-  return items[Math.floor(Math.random() * items.length)];
-};
-
 /* Main messages functionality */
 export const respondMessage = async (message, response) => {
   const regex = /(<([^>]+)>)/gi;
   const readableResponse = response.replace(regex, '');
-  message.channel.send(readableResponse);
+  await message.channel.send(readableResponse);
 };
 
 export const chatHandler = async (message) => {
@@ -39,48 +34,47 @@ export const chatHandler = async (message) => {
   }
 
   if (message.content.startsWith(`${PREFIX}test`)) {
-    const response = returnRandomItem(messages.test);
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.test();
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else if (message.content.startsWith(`${PREFIX}join`)) {
     if (!voiceChannel) {
-      respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
+      await respondMessage(
+        message,
+        messages.voiceConnectionRequired({ username: message.author.username })
+      );
     }
 
-    playMessage(connection, returnRandomItem(messages.join));
+    await playMessage(connection, messages.join({ username: message.author.username }));
   } else if (message.content.startsWith(`${PREFIX}random`)) {
-    const response = returnRandomItem(messages.random);
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.random({ username: message.author.username });
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else if (message.content.startsWith(`${PREFIX}support`)) {
-    const response = returnRandomItem(messages.emotionalSupport);
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.emotionalSupport({ username: message.author.username });
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else if (message.content.startsWith(`${PREFIX}tip`)) {
-    const response = returnRandomItem(messages.tip);
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.tip({ username: message.author.username });
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else if (message.content.startsWith(`${PREFIX}order`)) {
     const order = message.content.split(`${PREFIX}order`)[1];
-    const response = `${order}, ${returnRandomItem(messages.orderResponses)}`;
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.orderResponses({ username: message.author.username, order });
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else if (message.content.startsWith(`${PREFIX}menu`)) {
-    const response = `For today's menu we have<break time="700ms"/>: ${returnRandomItem(
-      messages.menuItems
-    )} <break time="700ms"/>, ${returnRandomItem(
-      messages.menuItems
-    )} <break time="700ms"/> and ${returnRandomItem(messages.menuItems)}`;
-    playMessage(connection, response);
-    respondMessage(message, response);
+    const response = messages.menu({ username: message.author.username });
+    await respondMessage(message, response);
+    await playMessage(connection, response);
   } else {
-    respondMessage(message, returnRandomItem(messages.unknownCommand));
+    await respondMessage(message, messages.unknownCommand({ username: message.author.username }));
   }
 
   /* Music section */
   // if (message.content.startsWith(`${PREFIX}play`)) {
   // if (!voiceChannel) {
-  //   respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
+  //   await respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
   // }
 
   //   playSong(message);

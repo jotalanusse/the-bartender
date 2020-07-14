@@ -61,6 +61,6 @@ export const playMessage = async (connection, message) => {
   } else {
     const filePath = await synthesizeVoice(message);
     logger.debug(`Playing voice file [${filePath}]`);
-    connection.play(filePath, { volume: 1 });
+    await connection.play(filePath, { volume: 1 });
   }
 };
