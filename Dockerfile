@@ -10,7 +10,7 @@ RUN apk add --no-cache ffmpeg
 
 # Install app dependencies
 COPY package.json /usr/src/app/
-RUN npm install
+RUN npm install --only=prod
 
 WORKDIR /usr/src/app
 
