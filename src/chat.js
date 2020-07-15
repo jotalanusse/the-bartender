@@ -11,11 +11,16 @@ const { PREFIX } = process.env;
 
 if (!PREFIX) throw new Error('Missing PREFIX environment variable');
 
+/* Helpers */
+export const removeSsmlTags = (text) => {
+  const regex = /(<([^>]+)>)/gi;
+  return text.replace(regex, '');
+};
+
 /* Main messages functionality */
 export const sendMessage = async (channel, text) => {
-  const regex = /(<([^>]+)>)/gi;
-  const readableText = text.replace(regex, '');
-  await channel.send(readableText);
+  const sanitizedText = removeSsmlTags(text);
+  await channel.send(sanitizedText);
 };
 
 export const sendAndPlayMessage = async (textChannel, voiceConnection, text) => {
