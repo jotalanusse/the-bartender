@@ -1,6 +1,6 @@
 /* Modules and files */
 import logger from './helpers/logger';
-import { playMessage } from './voice';
+import { playMessage, connectToVoiceChannel } from './voice';
 // import { playSong } from './music';
 
 /* Messages */
@@ -12,69 +12,57 @@ const { PREFIX } = process.env;
 if (!PREFIX) throw new Error('Missing PREFIX environment variable');
 
 /* Main messages functionality */
-export const respondMessage = async (message, response) => {
+export const sendMessage = async (channel, text) => {
   const regex = /(<([^>]+)>)/gi;
-  const readableResponse = response.replace(regex, '');
-  await message.channel.send(readableResponse);
+  const readableText = text.replace(regex, '');
+  await channel.send(readableText);
+};
+
+export const sendAndPlayMessage = async (textChannel, voiceConnection, text) => {
+  await Promise.all([sendMessage(textChannel, text), playMessage(voiceConnection, text)]);
 };
 
 export const chatHandler = async (message) => {
+  /* Check message */
   if (message.author.bot) return;
   if (!message.content.startsWith(PREFIX)) return;
-
   logger.debug(`New message [${message}]`);
 
+  /* "Global" variables */
   const voiceChannel = message.member.voice.channel;
-  let connection;
+  const voiceConnection = await connectToVoiceChannel(voiceChannel);
+  const textChannel = message.channel;
 
-  if (voiceChannel) {
-    connection = await voiceChannel.join();
-  } else {
-    logger.debug('There is no channel for The Bartender to connect to');
-  }
-
+  // TODO: Find a way to use other thing rather than if else
   if (message.content.startsWith(`${PREFIX}test`)) {
-    const response = messages.test();
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, messages.test());
   } else if (message.content.startsWith(`${PREFIX}join`)) {
-    if (!voiceChannel) {
-      await respondMessage(
-        message,
-        messages.voiceConnectionRequired({ username: message.author.username })
-      );
-    }
-
-    await playMessage(connection, messages.join({ username: message.author.username }));
+    const response = messages.join({ username: message.author.username });
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else if (message.content.startsWith(`${PREFIX}random`)) {
     const response = messages.random({ username: message.author.username });
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else if (message.content.startsWith(`${PREFIX}support`)) {
     const response = messages.emotionalSupport({ username: message.author.username });
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else if (message.content.startsWith(`${PREFIX}tip`)) {
     const response = messages.tip({ username: message.author.username });
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else if (message.content.startsWith(`${PREFIX}order`)) {
     const order = message.content.split(`${PREFIX}order`)[1];
     const response = messages.orderResponses({ username: message.author.username, order });
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else if (message.content.startsWith(`${PREFIX}menu`)) {
     const response = messages.menu({ username: message.author.username });
-    await respondMessage(message, response);
-    await playMessage(connection, response);
+    await sendAndPlayMessage(textChannel, voiceConnection, response);
   } else {
-    await respondMessage(message, messages.unknownCommand({ username: message.author.username }));
+    sendMessage(textChannel, messages.unknownCommand({ username: message.author.username }));
   }
 
   /* Music section */
   // if (message.content.startsWith(`${PREFIX}play`)) {
   // if (!voiceChannel) {
-  //   await respondMessage(message, returnRandomItem(messages.voiceConnectionRequired));
+  //   respondMessage(textChannel, returnRandomItem(messages.voiceConnectionRequired));
   // }
 
   //   playSong(message);

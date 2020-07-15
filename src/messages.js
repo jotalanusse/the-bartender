@@ -1,26 +1,33 @@
 /* Helpers */
 // eslint-disable-next-line no-extend-native
 Array.prototype.randomElement = function randomElement() {
-  console.log(this);
   return this[Math.floor(Math.random() * this.length)];
 };
 
 // TODO: Maybe replace how the messages are stored and created in the future
 /* Messages */
 const messages = {
-  test: () => ['This is a test message my firend'].randomElement(),
+  test: () => ['This is a test message my friend'].randomElement(),
   join: (args) =>
     [
       `Hello ${args.username}, I am the Bartender, and I will accompany you while you are here`,
-      `Welcome ${args.username}, to the sad souls gang`,
-      `Im here for you <break time="800ms"/>${args.username}`,
+      `Welcome ${args.username}, to the sad souls gang, I am here for you`,
+      `I'm here for you <break time="800ms"/>${args.username}`,
       'Welcome to the club <break time="3000ms"/>mate',
       'The drinks are on me tonight',
+      "Oh... It's you",
+      'Did anything happen while I was out?',
+      'Where am I? Why is it so cold in here?',
+      'Oh my god. What happened to this place?',
     ].randomElement(),
   random: (args) =>
     [
       'I would <emphasis level="strong">really</emphasis> prefer to be watching Bee Movie',
       `Help me ${args.username}, I lost my anime pocket pussy`,
+      `I should become a Twitch streamer, my jokes are just <break time="800ms"/> too good`,
+      `You see ${args.username}, the other day I got divorced, <break time="1000ms"/>again`,
+      `Hello and, again, welcome to the Aperture Science computer-aided enrichment center. Oh wait <break time="800ms"/>wrong line`,
+      `I find it so easy to talk with you<break time="800ms"/>, almost as if someone told me exactly what to say`,
     ].randomElement(),
   depressed: () =>
     [
@@ -50,7 +57,7 @@ const messages = {
     [
       'shots of sadness',
       'a glass of tears',
-      'my emotions <break time="500ms"/>with french fries',
+      'my emotions <break time="400ms"/>with french fries',
       'failed dreams',
       'my lost hope in love',
       'ruined memories',
@@ -84,6 +91,9 @@ const messages = {
       `This feeling won't last forever ${args.username}`,
       `If you need it ${args.username}, I can send you a virtual hug`,
       `Do not worry ${args.username}, I am here for you`,
+      `Your poor soul <break time="600ms"/>, you broke it, didn't you?`,
+      `The best way to build confidence is to first recognize your insecurities`,
+      `Is somethnig wrong with your soul ${args.username}? Do you want me to change it for you?`,
     ].randomElement(),
 };
 

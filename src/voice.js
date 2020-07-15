@@ -32,18 +32,18 @@ export const synthesizeVoice = async (text) => {
   const filePath = join(VOICE_PATH, `${fileNameHash}.mp3`);
 
   if (existsSync(filePath)) {
-    logger.debug(`Voice file [${filePath}] already exists`);
+    logger.debug(`Voice file [${filePath}] already exists, returning file path...`);
     return filePath;
   }
 
-  logger.debug(`Voice file [${filePath}] is not synthesized yet`);
-
+  logger.debug(`Voice file [${filePath}] is not synthesized yet, synthesizing...`);
   const synthesizedVoice = await text2wav(text, {
     voice: `${VOICE_VOICE}+${VOICE_VARIANT}`,
     speed: VOICE_SPEED,
     pitch: VOICE_PITCH,
     hasTags: true,
   });
+  logger.debug(`Voice successfuly synthesized`);
 
   const voiceBuffer = Buffer.from(synthesizedVoice);
   appendFileSync(filePath, voiceBuffer);
@@ -53,14 +53,25 @@ export const synthesizeVoice = async (text) => {
   return filePath;
 };
 
-export const playMessage = async (connection, message) => {
-  if (!connection) {
-    logger.debug(
-      `The voice message won't be played because The Bartender is not on any voice channel`
-    );
+export const connectToVoiceChannel = async (voiceChannel) => {
+  logger.debug('Connecting to voice channel...');
+  if (!voiceChannel) {
+    logger.debug('Invalid voice channel, unable to connect');
+    return null;
+  }
+
+  const connection = await voiceChannel.join();
+  logger.debug('Connection successful');
+  return connection;
+};
+
+export const playMessage = async (voiceConnection, text) => {
+  if (!voiceConnection) {
+    logger.debug(`The voice message won't be played because no valid connection was provided`);
   } else {
-    const filePath = await synthesizeVoice(message);
+    const filePath = await synthesizeVoice(text);
+
     logger.debug(`Playing voice file [${filePath}]`);
-    await connection.play(filePath, { volume: 1 });
+    await voiceConnection.play(filePath, { volume: 1 });
   }
 };
