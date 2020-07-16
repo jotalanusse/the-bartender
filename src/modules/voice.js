@@ -24,7 +24,7 @@ export const synthesizeVoice = async (text, voice, variant, speed, pitch) => {
     voice: `${voice}+${variant}`,
     speed,
     pitch,
-    hasTags: true, // We use tags for more epic voice lines
+    hasTags: true, // We use SSML tags for more epic voice lines
   });
   logger.debug(`Voice successfuly synthesized`);
 
@@ -55,12 +55,6 @@ export const createVoice = async (text) => {
 };
 
 export const playVoiceMessage = async (voiceConnection, text) => {
-  // TODO: Where the fuck do I check if the voice connection is valid?
-  if (!voiceConnection) {
-    logger.warning(`The provided voice connection is not valid, the voice message wont be played`);
-    return;
-  }
-
   const filePath = await createVoice(text);
   await playAudioFile(voiceConnection, filePath);
 };

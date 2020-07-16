@@ -24,15 +24,15 @@ export const configureAudioFilesPath = async (audioFilespath) => {
 export const connectToVoiceChannel = async (voiceChannel) => {
   const existingVoiceConnection = clientState.voiceConnections[voiceChannel.id];
   if (existingVoiceConnection) {
-    logger.debug(`A connection for the voice channel [${voiceChannel.id}] already exists`);
+    logger.connection(`A connection for the voice channel [${voiceChannel.id}] already exists`);
     return existingVoiceConnection;
   }
 
-  logger.debug(
+  logger.connection(
     `No existing voice connection for voice channel [${voiceChannel.id}] found, connecting to voice channel...`
   );
   const voiceConnection = await voiceChannel.join();
-  logger.debug('Connection successful');
+  logger.connection('Connection successful');
 
   logger.debug('Saving voice connection to the state');
   clientState.voiceConnections[voiceChannel.id] = voiceConnection;
@@ -40,7 +40,26 @@ export const connectToVoiceChannel = async (voiceChannel) => {
   return voiceConnection;
 };
 
+export const disconnectFromVoiceChannel = async (voiceChannel) => {
+  if (!voiceChannel) {
+    logger.connection(
+      `No connection for the voice channel [${voiceChannel.id}] found, unable disconnect`
+    );
+    return;
+  }
+
+  logger.connection(`Attempting to disconnect from voice channel [${voiceChannel.id}]...`);
+  await voiceChannel.leave();
+  logger.connection('Disconnection successful');
+};
+
 export const playAudioFile = async (voiceConnection, filePath) => {
+  // TODO: Where the fuck do I check if the voice connection is valid if it's not here?
+  if (!voiceConnection) {
+    logger.connection(`The provided voice connection is not valid, the audio file won't be played`);
+    return;
+  }
+
   logger.debug(`Playing audio file [${filePath}] at voice channel [${voiceConnection.channel.id}]`);
   await voiceConnection.play(filePath, { volume: 1 });
 };

@@ -10,14 +10,14 @@ const winstonConfig = {
       error: 0, // When something goes completly wrong
       warning: 1, // Warning logs (too many requests, many failed login attempts)
       info: 2, // Informational logs (server start, time, system information)
-      access: 3, // Inbound requests or resources access
+      connection: 3, // When the client connects to something
       debug: 4, // Testing and debugging
     },
     colors: {
       error: 'red',
       warning: 'yellow',
       info: 'green',
-      access: 'magenta',
+      connection: 'magenta',
       debug: 'cyan',
     },
   },
