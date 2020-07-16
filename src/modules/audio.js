@@ -11,10 +11,12 @@ if (!AUDIO_PATH) throw new Error('Missing VOICE_PATH environment variable');
 
 /* Audio functionality */
 // TODO: I don't really know where to put this functions, so for now it stays here
-export const configureAudioFilesPath = async (audioFilespath) => {
+// TODO: Should this function accept parameters in the first place?
+export const configureAudioFilesPath = async (audioFilespath = AUDIO_PATH) => {
   if (!existsSync(audioFilespath)) {
     logger.debug(`Audio folder [${audioFilespath}] does not exists, creating one...`);
     mkdirSync(audioFilespath);
+    logger.debug(`Audio folder [${audioFilespath}] created`);
   } else {
     const totalFiles = readdirSync(audioFilespath).length;
     logger.debug(`Audio folder [${audioFilespath}] found with [${totalFiles}] files`);
