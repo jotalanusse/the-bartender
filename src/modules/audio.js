@@ -41,6 +41,12 @@ export const connectToVoiceChannel = async (voiceChannel) => {
 };
 
 export const playAudioFile = async (voiceConnection, filePath) => {
+  // TODO: Where the fuck do I check if the voice connection is valid if it's not here?
+  if (!voiceConnection) {
+    logger.warning(`The provided voice connection is not valid, the audio file won't be played`);
+    return;
+  }
+
   logger.debug(`Playing audio file [${filePath}] at voice channel [${voiceConnection.channel.id}]`);
   await voiceConnection.play(filePath, { volume: 1 });
 };

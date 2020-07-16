@@ -16,7 +16,7 @@ export const saveFile = (filePath, buffer) => {
   logger.debug(`File [${filePath}] saved`);
 };
 
-export const removeSsmlTags = (text) => {
+export const removeSSMLTags = (text) => {
   const regex = /(<([^>]+)>)/gi;
   return text.replace(regex, '');
 };
