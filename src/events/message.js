@@ -2,7 +2,7 @@
 import logger from '../helpers/logger';
 import clientState from '../state';
 import script from '../modules/script';
-import { connectToVoiceChannel } from '../modules/audio';
+import { connectToVoiceChannel, disconnectFromVoiceChannel } from '../modules/audio';
 import { sendTextMessage } from '../modules/messages';
 import { playVoiceMessage } from '../modules/voice';
 
@@ -45,6 +45,23 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+      case `${PREFIX}silentjoin`: {
+        const text = script.join({ username: message.author.username });
+
+        await connectToVoiceChannel(voiceChannel);
+        voiceConnection = clientState.voiceConnections[voiceChannel.id]; // We have to update the current voiceConnection object
+
+        await sendTextMessage(textChannel, text);
+        break;
+      }
+      case `${PREFIX}leave`: {
+        const text = script.leave({ username: message.author.username });
+
+        await disconnectFromVoiceChannel(voiceChannel);
+
+        await sendTextMessage(textChannel, text);
+        break;
+      }
       case `${PREFIX}random`: {
         const text = script.random({ username: message.author.username });
         await Promise.all([
@@ -70,7 +87,7 @@ export const messageEventHandler = async (message) => {
         break;
       }
       case `${PREFIX}order`: {
-        const order = message.content.split(`${PREFIX}order`)[1];
+        const order = message.content.split(`${PREFIX}order `)[1];
         const text = script.orderResponses({ username: message.author.username, order });
         await Promise.all([
           sendTextMessage(textChannel, text),

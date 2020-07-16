@@ -20,6 +20,14 @@ const messages = {
       'Where am I? Why is it so cold in here?',
       'Oh my god. What happened to this place?',
     ].randomElement(),
+  leave: (args) =>
+    [
+      `Okay calm down ${args.username}, you don't have to say it like that.`,
+      `It's okay, I must go.`,
+      `My journey to nowhere shall begin.`,
+      `Remember when I lost anime pocket pussy? Well, I must go look for it now.`,
+      `Already? The bar just opened.`,
+    ].randomElement(),
   random: (args) =>
     [
       'I would <emphasis level="strong">really</emphasis> prefer to be watching Bee Movie.',
@@ -52,6 +60,16 @@ const messages = {
       `Look ${
         args.username
       }<break time="1000ms"/>, I can only offer you a 2x1 in ${messages.menuItems()}.`,
+    ].randomElement(),
+  userJoinedVoiceChannel: (args) =>
+    [
+      'Oh, we were just talking about you.',
+      `Welcome ${args.username}.`,
+      `Welcome ${args.username}, make yourself comfortable.`,
+      `${args.username} just hopped in.`,
+      `Talking about ${args.username}`,
+      `Welcome to the channel<break time="1000ms"/> mate`,
+      `Another member for the sad club`,
     ].randomElement(),
   menuItems: () =>
     [
