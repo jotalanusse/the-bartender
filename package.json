@@ -8,7 +8,7 @@
     "start-inspect": "node --inspect --require dotenv/config lib/index.js",
     "start": "node --require dotenv/config lib/index.js",
     "watch-build": "babel src --out-dir lib --watch --copy-files --source-maps",
-    "watch-start": "nodemon -w lib --exec \"npm run start\"",
+    "watch-start": "nodemon -w lib --exec \"npm run start-inspect\"",
     "update-packages": "ncu -u && npm install"
   },
   "author": "jotalanusse",

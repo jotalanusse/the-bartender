@@ -70,6 +70,15 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+      case `${COMMAND_PREFIX}tts`: {
+        // TODO: Temporal command???
+        const text = `${message.author.username} said: ${argument}`;
+        await Promise.all([
+          sendTextMessage(textChannel, text),
+          playVoiceMessage(voiceConnection, text),
+        ]);
+        break;
+      }
       case `${COMMAND_PREFIX}silentjoin`: {
         const text = script.join({ username: message.author.username });
 
@@ -112,8 +121,7 @@ export const messageEventHandler = async (message) => {
         break;
       }
       case `${COMMAND_PREFIX}order`: {
-        const order = message.content.split(`${COMMAND_PREFIX}order `)[1];
-        const text = script.orderResponses({ username: message.author.username, order });
+        const text = script.orderResponses({ username: message.author.username, order: argument });
         await Promise.all([
           sendTextMessage(textChannel, text),
           playVoiceMessage(voiceConnection, text),
