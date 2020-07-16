@@ -17,7 +17,7 @@ export const messageEventHandler = async (message) => {
 
   // Useful variables
   const voiceChannel = message.member.voice.channel;
-  let voiceConnection = clientState.voiceConnections[voiceChannel.id];
+  let voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks Inakineitor
   const textChannel = message.channel;
   const command = message.content.split(' ')[0];
 

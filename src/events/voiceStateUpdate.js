@@ -5,10 +5,23 @@ import script from '../modules/script';
 import { playVoiceMessage } from '../modules/voice';
 
 /* Handling */
-const userConnectedToClientChannel = (clientObject, userState) => {
-  if (userState.id !== clientObject.user.id && clientState.voiceConnections[userState.channelID]) {
+const userConnectedToClientChannel = (clientObject, oldState, newState) => {
+  // User is the client
+  if (newState.id === clientObject.user.id) {
+    logger.debug('The user is the client');
+    return false;
+  }
+
+  // The filter user state updates for when a user joins a channel
+  if (!((!oldState.channelID && newState.channelID) || oldState.channelID !== newState.channelID)) {
+    logger.debug(`User [${clientObject.user.id}] did not join a channel`);
+    return false;
+  }
+
+  // If the client has a voice connection to the given voice channel
+  if (clientState.voiceConnections[newState.channelID]) {
     logger.debug(
-      `User [${userState.id}] joined to the same voice channel [${userState.channelID}] as the client`
+      `User [${newState.id}] joined to the same voice channel [${newState.channelID}] as the client`
     );
     return true;
   }
@@ -16,7 +29,7 @@ const userConnectedToClientChannel = (clientObject, userState) => {
 };
 
 export const welcomeUserHandler = async (clientObject, oldState, newState) => {
-  if (userConnectedToClientChannel(clientObject, newState)) {
+  if (userConnectedToClientChannel(clientObject, oldState, newState)) {
     const voiceConnection = clientState.voiceConnections[newState.channelID];
     const { username } = newState.guild.members.cache.get(oldState.id).user;
     const text = script.userJoinedVoiceChannel({ username });
@@ -48,7 +61,7 @@ export const clientConnectionStateHandler = async (clientObject, oldState, newSt
 export const loader = async (clientObject) => {
   logger.info('Handler for the [voiceStateUpdate] event loaded');
   clientObject.on('voiceStateUpdate', async (oldState, newState) => {
-    await welcomeUserHandler(clientObject, oldState, newState);
     clientConnectionStateHandler(clientObject, oldState, newState); // Probably this is going to be async in the future
+    await welcomeUserHandler(clientObject, oldState, newState);
   });
 };
