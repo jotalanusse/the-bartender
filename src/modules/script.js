@@ -52,6 +52,16 @@ const messages = {
       `Sweet sweet ${args.order}<break time="1000ms"/>, would you like some peanuts with that?`,
       `${args.order}<break time="1000ms"/>, here you go<break time="2000ms"/> mate.`,
     ].randomElement(),
+  commandTooLong: (args) =>
+    [
+      `Hey ${args.username}<break time="800ms"/>, calm down. That is a lot of text for single command.`,
+      `I usually like big things, but this comand it's just<break time="800ms"/> <emphasis level="strong">too big</emphasis>.`,
+      `Im not going to read the whole command ${args.username}, please make it shorter.`,
+      `Hey mate, I only accept commands that are shorter than ${args.characterLimit} characters.`,
+      `Just so you know, if you make that command ${
+        args.characterCount - args.characterLimit
+      } characters shorter, there is a slim chance that I will read it.`,
+    ].randomElement(),
   menu: (args) =>
     [
       `For today we have<break time="800ms"/>: ${messages.menuItems()}<break time="800ms"/>, ${messages.menuItems()}<break time="800ms"/>, and ${messages.menuItems()}.`,

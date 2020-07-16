@@ -7,25 +7,50 @@ import { sendTextMessage } from '../modules/messages';
 import { playVoiceMessage } from '../modules/voice';
 
 /* Enviorment variables */
-const { PREFIX } = process.env;
-if (!PREFIX) throw new Error('Missing PREFIX environment variable');
+const { COMMAND_PREFIX, COMMAND_MAX_CHARS } = process.env;
+if (!COMMAND_PREFIX) throw new Error('Missing COMMAND_PREFIX environment variable');
+if (!COMMAND_MAX_CHARS) throw new Error('Missing COMMAND_MAX_CHARS environment variable');
 
 /* Handling */
 export const messageEventHandler = async (message) => {
   if (message.author.bot) return; // Was the message sent by a bot?
-  if (!message.content.startsWith(PREFIX)) return; // Does it starts with our assigned prefix?
+  if (!message.content.startsWith(COMMAND_PREFIX)) return; // Does it starts with our assigned prefix?
 
   // Useful variables
   const voiceChannel = message.member.voice.channel;
   let voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks Inakineitor
   const textChannel = message.channel;
-  const command = message.content.split(' ')[0];
+
+  // Command variables
+  const splittedMessage = message.content.split(/ (.+)/);
+  const command = splittedMessage[0];
+  const argument = splittedMessage[1];
+  const argumentLength = argument?.length || 0; // We do this in case the command doesn't have any arguments
 
   logger.debug(`New command detected [${command}]`);
 
+  // Check if the command is too long (definition of "mucho texto pa")
+  if (argumentLength > COMMAND_MAX_CHARS) {
+    logger.warning(
+      `User [${message.author.id}] sent a command too long [${argumentLength}] characters, max accepted length is [${COMMAND_MAX_CHARS}] characters`
+    );
+
+    const text = script.commandTooLong({
+      username: message.author.username,
+      characterLimit: COMMAND_MAX_CHARS,
+      characterCount: argumentLength,
+    });
+    await Promise.all([
+      sendTextMessage(textChannel, text),
+      playVoiceMessage(voiceConnection, text),
+    ]);
+
+    return;
+  }
+
   const handleCommand = async () => {
     switch (command) {
-      case `${PREFIX}test`: {
+      case `${COMMAND_PREFIX}test`: {
         const text = script.test({ username: message.author.username });
         await Promise.all([
           sendTextMessage(textChannel, text),
@@ -33,7 +58,7 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}join`: {
+      case `${COMMAND_PREFIX}join`: {
         const text = script.join({ username: message.author.username });
 
         await connectToVoiceChannel(voiceChannel);
@@ -45,7 +70,7 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}silentjoin`: {
+      case `${COMMAND_PREFIX}silentjoin`: {
         const text = script.join({ username: message.author.username });
 
         await connectToVoiceChannel(voiceChannel);
@@ -54,7 +79,7 @@ export const messageEventHandler = async (message) => {
         await sendTextMessage(textChannel, text);
         break;
       }
-      case `${PREFIX}leave`: {
+      case `${COMMAND_PREFIX}leave`: {
         const text = script.leave({ username: message.author.username });
 
         await disconnectFromVoiceChannel(voiceChannel);
@@ -62,7 +87,7 @@ export const messageEventHandler = async (message) => {
         await sendTextMessage(textChannel, text);
         break;
       }
-      case `${PREFIX}random`: {
+      case `${COMMAND_PREFIX}random`: {
         const text = script.random({ username: message.author.username });
         await Promise.all([
           sendTextMessage(textChannel, text),
@@ -70,7 +95,7 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}support`: {
+      case `${COMMAND_PREFIX}support`: {
         const text = script.support({ username: message.author.username });
         await Promise.all([
           sendTextMessage(textChannel, text),
@@ -78,7 +103,7 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}tip`: {
+      case `${COMMAND_PREFIX}tip`: {
         const text = script.tip({ username: message.author.username });
         await Promise.all([
           sendTextMessage(textChannel, text),
@@ -86,8 +111,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}order`: {
-        const order = message.content.split(`${PREFIX}order `)[1];
+      case `${COMMAND_PREFIX}order`: {
+        const order = message.content.split(`${COMMAND_PREFIX}order `)[1];
         const text = script.orderResponses({ username: message.author.username, order });
         await Promise.all([
           sendTextMessage(textChannel, text),
@@ -95,7 +120,7 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
-      case `${PREFIX}menu`: {
+      case `${COMMAND_PREFIX}menu`: {
         const text = script.menu({ username: message.author.username });
         await Promise.all([
           sendTextMessage(textChannel, text),
