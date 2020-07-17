@@ -8,23 +8,22 @@ import { playVoiceMessage } from '../modules/voice';
 const userConnectedToClientChannel = (clientObject, oldState, newState) => {
   // User is the client
   if (newState.id === clientObject.user.id) {
-    logger.debug('The user is the client');
     return false;
   }
 
-  // The filter user state updates for when a user joins a channel
+  // Filter user state updates so we only continue when a user joins a channel
   if (!((!oldState.channelID && newState.channelID) || oldState.channelID !== newState.channelID)) {
-    logger.debug(`User [${clientObject.user.id}] did not join a channel`);
     return false;
   }
 
   // If the client has a voice connection to the given voice channel
   if (clientState.voiceConnections[newState.channelID]) {
     logger.debug(
-      `User [${newState.id}] joined to the same voice channel [${newState.channelID}] as the client`
+      `User [${newState.id}] joined one of the voice channels [${newState.channelID}] in which the client is present`
     );
     return true;
   }
+
   return false;
 };
 

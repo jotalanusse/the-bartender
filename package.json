@@ -8,7 +8,7 @@
     "start-inspect": "node --inspect --require dotenv/config lib/index.js",
     "start": "node --require dotenv/config lib/index.js",
     "watch-build": "babel src --out-dir lib --watch --copy-files --source-maps",
-    "watch-start": "nodemon -w lib --exec \"npm run start\"",
+    "watch-start": "nodemon -w lib --exec \"npm run start-inspect\"",
     "update-packages": "ncu -u && npm install"
   },
   "author": "jotalanusse",
@@ -17,7 +17,6 @@
     "@discordjs/opus": "^0.3.2",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "text2wav": "0.0.13",
     "winston": "^3.3.3"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 /* Packages */
 import { existsSync } from 'fs';
-import text2wav from 'text2wav';
+import { spawn } from 'child_process';
 import { join } from 'path';
 
 /* Modules and files */
@@ -18,18 +18,40 @@ if (!VOICE_PITCH) throw new Error('Missing VOICE_PITCH environment variable');
 if (!AUDIO_PATH) throw new Error('Missing AUDIO_PATH environment variable');
 
 /* Voice functionality */
-export const synthesizeVoice = async (text, voice, variant, speed, pitch) => {
-  logger.debug(`Synthesizing voice...`);
-  const synthesizedVoice = await text2wav(text, {
-    voice: `${voice}+${variant}`,
-    speed,
-    pitch,
-    hasTags: true, // We use SSML tags for more epic voice lines
-  });
-  logger.debug(`Voice successfuly synthesized`);
+export const synthesizeVoice = async (text, voice, variant, speed, pitch) =>
+  new Promise((resolve, reject) => {
+    logger.debug(`Synthesizing voice...`);
 
-  return Buffer.from(synthesizedVoice);
-};
+    const eSpeakNgProcess = spawn('espeak-ng', [
+      text,
+      '-v',
+      voice,
+      '-s',
+      speed,
+      '-p',
+      pitch,
+      '-m',
+      '--stdout',
+    ]);
+
+    const buffers = []; // Each time we receive data we need to push it to an array
+    eSpeakNgProcess.stdout.on('data', (data) => {
+      buffers.push(data);
+    });
+
+    eSpeakNgProcess.stderr.on('data', (data) => {
+      return reject(new Error(data.toString()));
+    });
+
+    eSpeakNgProcess.on('close', (code) => {
+      if (code !== 0) {
+        return reject(new Error(`Process exited with code ${code}`));
+      }
+
+      logger.debug(`Voice successfuly synthesized`);
+      return resolve(Buffer.concat(buffers)); // Here we concat the buffers array
+    });
+  });
 
 export const createVoice = async (text) => {
   const fileName = `${VOICE_VOICE}+${VOICE_VARIANT}+${VOICE_SPEED}+${VOICE_PITCH}+${text}`;
@@ -49,6 +71,7 @@ export const createVoice = async (text) => {
     VOICE_SPEED,
     VOICE_PITCH
   );
+
   saveFile(filePath, voiceBuffer);
 
   return filePath;
