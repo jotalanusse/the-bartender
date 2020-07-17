@@ -18,7 +18,7 @@ export const messageEventHandler = async (message) => {
 
   // Useful variables
   const voiceChannel = message.member.voice.channel;
-  let voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks Inakineitor
+  let voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks @inakineitor
   const textChannel = message.channel;
 
   // Command variables
