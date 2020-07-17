@@ -52,6 +52,13 @@ const messages = {
       `Sweet sweet ${args.order}<break time="1000ms"/>, would you like some peanuts with that?`,
       `${args.order}<break time="1000ms"/>, here you go<break time="2000ms"/> mate.`,
     ].randomElement(),
+  repository: (args) =>
+    [
+      `You show more interset in me than my father did.`,
+      `If you wanna help me out ${args.username}, check out my home.`,
+      `Hey ${args.username}, why don't we take this to my place?`,
+      `We've just met, and you already want to take closer look.`,
+    ].randomElement(),
   commandTooLong: (args) =>
     [
       `Hey ${args.username}<break time="800ms"/>, calm down. That is a lot of text for single command.`,

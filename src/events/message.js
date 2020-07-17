@@ -1,8 +1,12 @@
+/* Packages */
+import Discord from 'discord.js';
+
 /* Modules and files */
 import logger from '../helpers/logger';
 import clientState from '../state';
 import script from '../modules/script';
 import { connectToVoiceChannel, disconnectFromVoiceChannel } from '../modules/audio';
+import { removeSSMLTags } from '../helpers/helpers';
 import { sendTextMessage } from '../modules/messages';
 import { playVoiceMessage } from '../modules/voice';
 
@@ -41,7 +45,7 @@ export const messageEventHandler = async (message) => {
       characterCount: argumentLength,
     });
     await Promise.all([
-      sendTextMessage(textChannel, text),
+      sendTextMessage(textChannel, removeSSMLTags(text)),
       playVoiceMessage(voiceConnection, text),
     ]);
 
@@ -53,7 +57,7 @@ export const messageEventHandler = async (message) => {
       case `${COMMAND_PREFIX}test`: {
         const text = script.test({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -65,7 +69,28 @@ export const messageEventHandler = async (message) => {
         voiceConnection = clientState.voiceConnections[voiceChannel.id]; // We have to update the current voiceConnection object
 
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
+          playVoiceMessage(voiceConnection, text),
+        ]);
+        break;
+      }
+      case `${COMMAND_PREFIX}repo`: {
+        const text = script.repository({ username: message.author.username });
+
+        const embedMessage = new Discord.MessageEmbed()
+          .setColor('#4c2461')
+          .setTitle('The Bartender')
+          .setURL('https://github.com/jotalanusse/the-bartender/')
+          // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
+          .setDescription(
+            'The Bartender is a bot made for you to fill your dead, empty soul. It will help you overcome your sadness with it’s shitty sense of humor and it’s lame jokes. With The Bartender by your side there is no way you can feel alone, that’s for sure (I promise you will end up muting it).'
+          )
+          // .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+          .setTimestamp()
+          .setFooter('The best bartender');
+
+        await Promise.all([
+          sendTextMessage(textChannel, embedMessage),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -74,7 +99,7 @@ export const messageEventHandler = async (message) => {
         // TODO: Temporal command???
         const text = `${message.author.username} said: ${argument}`;
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -85,7 +110,7 @@ export const messageEventHandler = async (message) => {
         await connectToVoiceChannel(voiceChannel);
         voiceConnection = clientState.voiceConnections[voiceChannel.id]; // We have to update the current voiceConnection object
 
-        await sendTextMessage(textChannel, text);
+        await sendTextMessage(textChannel, removeSSMLTags(text));
         break;
       }
       case `${COMMAND_PREFIX}leave`: {
@@ -93,13 +118,13 @@ export const messageEventHandler = async (message) => {
 
         await disconnectFromVoiceChannel(voiceChannel);
 
-        await sendTextMessage(textChannel, text);
+        await sendTextMessage(textChannel, removeSSMLTags(text));
         break;
       }
       case `${COMMAND_PREFIX}random`: {
         const text = script.random({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -107,7 +132,7 @@ export const messageEventHandler = async (message) => {
       case `${COMMAND_PREFIX}support`: {
         const text = script.support({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -115,7 +140,7 @@ export const messageEventHandler = async (message) => {
       case `${COMMAND_PREFIX}tip`: {
         const text = script.tip({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -123,7 +148,7 @@ export const messageEventHandler = async (message) => {
       case `${COMMAND_PREFIX}order`: {
         const text = script.orderResponses({ username: message.author.username, order: argument });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -131,7 +156,7 @@ export const messageEventHandler = async (message) => {
       case `${COMMAND_PREFIX}menu`: {
         const text = script.menu({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
         break;
@@ -139,7 +164,7 @@ export const messageEventHandler = async (message) => {
       default: {
         const text = script.unknownCommand({ username: message.author.username });
         await Promise.all([
-          sendTextMessage(textChannel, text),
+          sendTextMessage(textChannel, removeSSMLTags(text)),
           playVoiceMessage(voiceConnection, text),
         ]);
       }
