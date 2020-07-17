@@ -12,9 +12,11 @@ npm run start # Run the bot
 npm run watch-build # Continuously watch for changes and re-compile
 npm run watch-start # Continuously watch for changes and restart the server (it also enables the debugger)
 ```
+**NOTE:** For voice synthesizing [espeak-ng](https://github.com/espeak-ng/espeak-ng) is used (so yeah, you will need it).
 
 ## Contributing:
-Pull requests are more than welcome. For major changes, please open an issue first to discuss what you would like to change. 
+**NOTE:** Please note that this project just began, so the code strucure is very likely to change entirely.
+Pull requests are more than welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Todo:
 ```
