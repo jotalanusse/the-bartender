@@ -54,6 +54,7 @@ export const messageEventHandler = async (message) => {
 
   const handleCommand = async () => {
     switch (command) {
+      // A test command for testing voice and chat functionality
       case `${COMMAND_PREFIX}test`: {
         const text = script.test({ username: message.author.username });
         await Promise.all([
@@ -62,6 +63,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Join the voice channel the user is currently in
       case `${COMMAND_PREFIX}join`: {
         const text = script.join({ username: message.author.username });
 
@@ -74,6 +77,10 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Show the source code repository
+      case `${COMMAND_PREFIX}github`:
+      case `${COMMAND_PREFIX}repository`:
       case `${COMMAND_PREFIX}repo`: {
         const text = script.repository({ username: message.author.username });
 
@@ -95,8 +102,9 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Speak a voiceline in the name of a user
       case `${COMMAND_PREFIX}tts`: {
-        // TODO: Temporal command???
         const text = `${message.author.username} said: ${argument}`;
         await Promise.all([
           sendTextMessage(textChannel, removeSSMLTags(text)),
@@ -104,6 +112,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Join the voice channel the user is currently in, but without speaking
       case `${COMMAND_PREFIX}silentjoin`: {
         const text = script.join({ username: message.author.username });
 
@@ -113,6 +123,8 @@ export const messageEventHandler = async (message) => {
         await sendTextMessage(textChannel, removeSSMLTags(text));
         break;
       }
+
+      // Leave the voice channel the user is currently in
       case `${COMMAND_PREFIX}leave`: {
         const text = script.leave({ username: message.author.username });
 
@@ -121,6 +133,8 @@ export const messageEventHandler = async (message) => {
         await sendTextMessage(textChannel, removeSSMLTags(text));
         break;
       }
+
+      // Say something random
       case `${COMMAND_PREFIX}random`: {
         const text = script.random({ username: message.author.username });
         await Promise.all([
@@ -129,6 +143,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Show some support to the user
       case `${COMMAND_PREFIX}support`: {
         const text = script.support({ username: message.author.username });
         await Promise.all([
@@ -137,6 +153,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Tip the bartender
       case `${COMMAND_PREFIX}tip`: {
         const text = script.tip({ username: message.author.username });
         await Promise.all([
@@ -145,6 +163,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Orser something the bartender
       case `${COMMAND_PREFIX}order`: {
         const text = script.orderResponses({ username: message.author.username, order: argument });
         await Promise.all([
@@ -153,6 +173,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Ask the bartender for the menu
       case `${COMMAND_PREFIX}menu`: {
         const text = script.menu({ username: message.author.username });
         await Promise.all([
@@ -161,6 +183,8 @@ export const messageEventHandler = async (message) => {
         ]);
         break;
       }
+
+      // Unknown command situation
       default: {
         const text = script.unknownCommand({ username: message.author.username });
         await Promise.all([
@@ -171,7 +195,7 @@ export const messageEventHandler = async (message) => {
     }
   };
 
-  await handleCommand(command);
+  await handleCommand(command); // We do the switch inside a function so we can use async/await
 };
 
 /* Loader */

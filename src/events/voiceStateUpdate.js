@@ -33,7 +33,7 @@ export const welcomeUserHandler = async (clientObject, oldState, newState) => {
     const { username } = newState.guild.members.cache.get(oldState.id).user;
     const text = script.userJoinedVoiceChannel({ username });
 
-    await playVoiceMessage(voiceConnection, `<break time="1800ms"/>${text}`);
+    await playVoiceMessage(voiceConnection, `<break time="1800ms"/>${text}`); // We add a break to wait for the user's voice connection
   }
 };
 
