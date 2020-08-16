@@ -2,7 +2,7 @@
 # The Bartender
 Have you ever felt **sad** and **alone**? Well don’t worry, we have a solution for you.
 
-The Bartender is a bot made for you to fill your dead, empty soul. It will help you overcome your sadness with it’s shitty sense of humor and it’s lame jokes. With The Bartender by your side there is no way you can feel alone, that’s for sure (I promise you, you will end up muting it).
+The Bartender is a bot made for you to fill your dead, empty heart. It will help you overcome your sadness with it’s shitty sense of humor and it’s lame jokes. With The Bartender by your side there is no way you can feel alone, that’s for sure (you will end up muting it, I promise you).
 
 ## Usage:
 **DISCLAIMER:** The Bartender isn't built for anyone to deploy it. It has a very specific behaviour and it isn't portable. But I'm not here to tell you what to do.
