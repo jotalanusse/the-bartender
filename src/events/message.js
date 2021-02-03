@@ -54,6 +54,78 @@ export const messageEventHandler = async (message) => {
 
   const handleCommand = async () => {
     switch (command) {
+      // Show a help message
+      case `${COMMAND_PREFIX}help`:
+      case `${COMMAND_PREFIX}commands`: {
+        const text = script.help({ username: message.author.username });
+        await sendTextMessage(textChannel, removeSSMLTags(text));
+
+        const embedMessage = new Discord.MessageEmbed()
+          .setColor('#4c2461')
+          .setTitle('Help menu')
+          .setDescription(
+            `Hey ${message.author.username}, here you have some commands you can use with The Bartender. In the near future it will be able to do much more, have fun!`
+          )
+          .addFields([
+            {
+              name: `${COMMAND_PREFIX}help, commands`,
+              value: 'Display this menu',
+            },
+            {
+              name: `${COMMAND_PREFIX}test`,
+              value: 'Send a test message',
+            },
+            {
+              name: `${COMMAND_PREFIX}join`,
+              value: `Join the user's voice channel`,
+            },
+            {
+              name: `${COMMAND_PREFIX}github, repository, repo`,
+              value: 'Show the link for the project git repository',
+            },
+            {
+              name: `${COMMAND_PREFIX}tts`,
+              value: 'Play a message in the currently connected voice channel',
+            },
+            {
+              name: `${COMMAND_PREFIX}silentjoin`,
+              value: `Join the user's voice channel without talking (shhh)`,
+            },
+            {
+              name: `${COMMAND_PREFIX}leave`,
+              value: 'Leave the voice cjannel',
+            },
+            {
+              name: `${COMMAND_PREFIX}random`,
+              value: 'Say something random',
+            },
+            {
+              name: `${COMMAND_PREFIX}support`,
+              value: 'Receive some emotional support',
+            },
+            {
+              name: `${COMMAND_PREFIX}tip`,
+              value: 'Tip The Bartender for his awsome service',
+            },
+            {
+              name: `${COMMAND_PREFIX}order`,
+              value: 'Order something to fill your empty soul',
+            },
+            {
+              name: `${COMMAND_PREFIX}menu`,
+              value: `Show today's menu`,
+            },
+          ])
+          .setTimestamp()
+          .setFooter('The best bartender');
+
+        await Promise.all([
+          sendTextMessage(textChannel, embedMessage),
+          playVoiceMessage(voiceConnection, text),
+        ]);
+        break;
+      }
+
       // A test command for testing voice and chat functionality
       case `${COMMAND_PREFIX}test`: {
         const text = script.test({ username: message.author.username });
@@ -88,11 +160,9 @@ export const messageEventHandler = async (message) => {
           .setColor('#4c2461')
           .setTitle('The Bartender')
           .setURL('https://github.com/jotalanusse/the-bartender/')
-          // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
           .setDescription(
             'The Bartender is a bot made for you to fill your dead, empty soul. It will help you overcome your sadness with it’s shitty sense of humor and it’s lame jokes. With The Bartender by your side there is no way you can feel alone, that’s for sure (I promise you will end up muting it).'
           )
-          // .setThumbnail('https://i.imgur.com/wSTFkRM.png')
           .setTimestamp()
           .setFooter('The best bartender');
 
@@ -154,7 +224,7 @@ export const messageEventHandler = async (message) => {
         break;
       }
 
-      // Tip the bartender
+      // Tip The Bartender
       case `${COMMAND_PREFIX}tip`: {
         const text = script.tip({ username: message.author.username });
         await Promise.all([
@@ -164,7 +234,7 @@ export const messageEventHandler = async (message) => {
         break;
       }
 
-      // Orser something the bartender
+      // Order something
       case `${COMMAND_PREFIX}order`: {
         const text = script.orderResponses({ username: message.author.username, order: argument });
         await Promise.all([
@@ -174,7 +244,7 @@ export const messageEventHandler = async (message) => {
         break;
       }
 
-      // Ask the bartender for the menu
+      // Ask The Bartender for the menu
       case `${COMMAND_PREFIX}menu`: {
         const text = script.menu({ username: message.author.username });
         await Promise.all([
