@@ -20,6 +20,14 @@ const messages = {
       'Where am I? Why is it so cold in here?',
       'Oh my god. What happened to this place?',
     ].randomElement(),
+  help: (args) =>
+    [
+      `Well ${args.username}, I hope this is helpful enough.`,
+      `Just a sad soul helping another sad soul...`,
+      `I can't believe this ${args.username}, did you forget how to talk to me?`,
+      `Okay, but stop shouting please`,
+      `${args.username} at least you are able to ask for help.`,
+    ].randomElement(),
   leave: (args) =>
     [
       `Okay calm down ${args.username}, you don't have to say it like that.`,
