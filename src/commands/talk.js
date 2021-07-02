@@ -12,26 +12,28 @@ import { playVoiceMessage } from '../modules/voice';
 /* Enviorment variables */
 const {
   OPENAI_API_KEY,
-  OPENAI_AI_ENGINE,
-  OPENAI_AI_MAX_TOKENS,
-  OPENAI_AI_MAX_CONVERSATION_LENGTH,
-  OPENAI_AI_TEMPERATURE,
-  OPENAI_AI_TOP_P,
-  OPENAI_AI_PRESENCE_PENALTY,
-  OPENAI_AI_FREQUENCY_PENALTY,
+  OPENAI_API_ENGINE,
+  OPENAI_API_CONTEXT,
+  OPENAI_API_MAX_TOKENS,
+  OPENAI_API_MAX_CONVERSATION_LENGTH,
+  OPENAI_API_TEMPERATURE,
+  OPENAI_API_TOP_P,
+  OPENAI_API_PRESENCE_PENALTY,
+  OPENAI_API_FREQUENCY_PENALTY,
 } = process.env;
 
 if (!OPENAI_API_KEY) throw new Error('Missing OPENAI_API_KEY environment variable');
-if (!OPENAI_AI_ENGINE) throw new Error('Missing OPENAI_AI_ENGINE environment variable');
-if (!OPENAI_AI_MAX_TOKENS) throw new Error('Missing OPENAI_AI_MAX_TOKENS environment variable');
-if (!OPENAI_AI_MAX_CONVERSATION_LENGTH)
-  throw new Error('Missing OPENAI_AI_MAX_CONVERSATION_LENGTH environment variable');
-if (!OPENAI_AI_TEMPERATURE) throw new Error('Missing OPENAI_AI_TEMPERATURE environment variable');
-if (!OPENAI_AI_TOP_P) throw new Error('Missing OPENAI_AI_TOP_P environment variable');
-if (!OPENAI_AI_PRESENCE_PENALTY)
-  throw new Error('Missing OPENAI_AI_PRESENCE_PENALTY environment variable');
-if (!OPENAI_AI_FREQUENCY_PENALTY)
-  throw new Error('Missing OPENAI_AI_FREQUENCY_PENALTY environment variable');
+if (!OPENAI_API_ENGINE) throw new Error('Missing OPENAI_API_ENGINE environment variable');
+if (!OPENAI_API_CONTEXT) throw new Error('Missing OPENAI_API_CONTEXT environment variable');
+if (!OPENAI_API_MAX_TOKENS) throw new Error('Missing OPENAI_API_MAX_TOKENS environment variable');
+if (!OPENAI_API_MAX_CONVERSATION_LENGTH)
+  throw new Error('Missing OPENAI_API_MAX_CONVERSATION_LENGTH environment variable');
+if (!OPENAI_API_TEMPERATURE) throw new Error('Missing OPENAI_API_TEMPERATURE environment variable');
+if (!OPENAI_API_TOP_P) throw new Error('Missing OPENAI_API_TOP_P environment variable');
+if (!OPENAI_API_PRESENCE_PENALTY)
+  throw new Error('Missing OPENAI_API_PRESENCE_PENALTY environment variable');
+if (!OPENAI_API_FREQUENCY_PENALTY)
+  throw new Error('Missing OPENAI_API_FREQUENCY_PENALTY environment variable');
 
 /* OpenAI instance */
 const openai = new OpenAI(OPENAI_API_KEY);
@@ -44,7 +46,7 @@ const addPromptInput = (author, text, promptArray) => {
     text,
   });
 
-  if (promptArray.length >= OPENAI_AI_MAX_CONVERSATION_LENGTH) {
+  if (promptArray.length >= OPENAI_API_MAX_CONVERSATION_LENGTH) {
     promptArray.shift(); // Remove the first item once we reach the limit
   }
 
@@ -52,8 +54,7 @@ const addPromptInput = (author, text, promptArray) => {
 };
 
 const parsePromptArray = (promptArray) => {
-  let prompt =
-    'The following is a conversation with a bartender. The bartender is sad, depressive, intelligent, and very friendly.\n\n';
+  let prompt = `${OPENAI_API_CONTEXT}\n\n`;
 
   promptArray.forEach((promptInput) => {
     if (promptInput.author === 'human') {
@@ -76,13 +77,13 @@ const processPrompt = async (prompt) => {
   logger.debug(`Processing prompt against OpenAI...`);
 
   const response = await openai.complete({
-    engine: OPENAI_AI_ENGINE,
+    engine: OPENAI_API_ENGINE,
     prompt,
-    maxTokens: parseInt(OPENAI_AI_MAX_TOKENS, 10),
-    temperature: parseInt(OPENAI_AI_TEMPERATURE, 10),
-    topP: parseInt(OPENAI_AI_TOP_P, 10),
-    presencePenalty: parseInt(OPENAI_AI_PRESENCE_PENALTY, 10),
-    frequencyPenalty: parseInt(OPENAI_AI_FREQUENCY_PENALTY, 10),
+    maxTokens: parseInt(OPENAI_API_MAX_TOKENS, 10),
+    temperature: parseInt(OPENAI_API_TEMPERATURE, 10),
+    topP: parseInt(OPENAI_API_TOP_P, 10),
+    presencePenalty: parseInt(OPENAI_API_PRESENCE_PENALTY, 10),
+    frequencyPenalty: parseInt(OPENAI_API_FREQUENCY_PENALTY, 10),
     bestOf: 1,
     n: 1,
     stream: false,
