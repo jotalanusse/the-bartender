@@ -112,8 +112,6 @@ const talk = async (message, argument) => {
 
   const prompt = parsePromptArray(conversation); // Parse the conversation intop a procesable text
 
-  console.log(prompt);
-
   const promptResponse = await processPrompt(prompt); // Send the text to OpenAI
   let finalText = promptResponse.data.choices[0].text;
 
