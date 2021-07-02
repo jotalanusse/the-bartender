@@ -9,7 +9,7 @@ import { connectToVoiceChannel } from '../modules/audio';
 const join = async (message) => {
   // Useful variables
   const voiceChannel = message.member.voice.channel;
-  const voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks @inakineitor
+  let voiceConnection = clientState.voiceConnections[voiceChannel?.id]; // Thanks @inakineitor
   const textChannel = message.channel;
 
   // Command logic
@@ -18,7 +18,7 @@ const join = async (message) => {
   const sanitizedText = removeSSMLTags(scriptText);
   const finalText = replacePlaceholders(sanitizedText, script, message);
 
-  await connectToVoiceChannel(voiceChannel);
+  voiceConnection = await connectToVoiceChannel(voiceChannel);
   // voiceConnection = clientState.voiceConnections[voiceChannel.id]; // We have to update the current voiceConnection object
 
   await Promise.all([

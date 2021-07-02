@@ -3,7 +3,7 @@ services:
   ######## The Bartender ########
   the-bartender:
     restart: always
-    image: docker.pkg.github.com/jotalanusse/the-bartender/the-bartender:latest
+    image: ghcr.io/jotalanusse/the-bartender:master
     env_file: .env
     environment:
       - NODE_ENV=${NODE_ENV}

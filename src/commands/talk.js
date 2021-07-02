@@ -52,17 +52,18 @@ const addPromptInput = (author, text, promptArray) => {
 };
 
 const parsePromptArray = (promptArray) => {
-  let prompt = '';
+  let prompt =
+    'The following is a conversation with a bartender. The bartender is sad, depressive, intelligent, and very friendly.\n\n';
 
   promptArray.forEach((promptInput) => {
     if (promptInput.author === 'human') {
       prompt += 'Human: ';
       prompt += promptInput.text;
       prompt += '\n';
-      prompt += 'AI: ';
+      prompt += 'Bartender: ';
     }
 
-    if (promptInput.author === 'ai') {
+    if (promptInput.author === 'bartender') {
       prompt += promptInput.text;
       prompt += '\n';
     }
@@ -85,7 +86,7 @@ const processPrompt = async (prompt) => {
     bestOf: 1,
     n: 1,
     stream: false,
-    stop: ['\n', 'Human:', 'AI:'],
+    stop: ['\n', 'Human:', 'Bartender:'],
   });
 
   return response;
@@ -110,6 +111,9 @@ const talk = async (message, argument) => {
   conversation = addPromptInput('human', argument, conversation); // Add a human input to the prompt array
 
   const prompt = parsePromptArray(conversation); // Parse the conversation intop a procesable text
+
+  console.log(prompt);
+
   const promptResponse = await processPrompt(prompt); // Send the text to OpenAI
   let finalText = promptResponse.data.choices[0].text;
 
@@ -123,7 +127,7 @@ const talk = async (message, argument) => {
     finalText = replacePlaceholders(sanitizedText, script, message);
   }
 
-  conversation = addPromptInput('ai', finalText, conversation); // Add AI response to the prompt array
+  conversation = addPromptInput('bartender', finalText, conversation); // Add AI response to the prompt array
 
   clientState.conversations[textChannel.id] = conversation;
 
