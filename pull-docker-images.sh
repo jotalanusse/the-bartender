@@ -1,3 +1,3 @@
 echo "Pulling Docker images..."
-docker pull "docker.pkg.github.com/jotalanusse/the-bartender/the-bartender:latest"
+docker pull ghcr.io/jotalanusse/the-bartender:master
 echo "Done!"
