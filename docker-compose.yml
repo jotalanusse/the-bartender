@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  ######## The Bartender ########
+  the-bartender:
+    restart: always
+    image: docker.pkg.github.com/jotalanusse/the-bartender/the-bartender:latest
+    env_file: .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - audio:/var/lib/the-bartender/audio
+
+volumes:
+  audio:
