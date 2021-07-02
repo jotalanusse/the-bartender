@@ -18,6 +18,7 @@ npm run watch-start # Continuously watch for changes and restart the server (it 
 
 ## Contributing:
 **NOTE:** Please note that this project just began, so the code strucure is very likely to change entirely.
+
 Pull requests are more than welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Todo:
