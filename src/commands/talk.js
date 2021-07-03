@@ -13,6 +13,7 @@ import { playVoiceMessage } from '../modules/voice';
 const {
   OPENAI_API_KEY,
   OPENAI_API_ENGINE,
+  OPENAI_API_TAG,
   OPENAI_API_CONTEXT,
   OPENAI_API_MAX_TOKENS,
   OPENAI_API_MAX_CONVERSATION_LENGTH,
@@ -24,6 +25,7 @@ const {
 
 if (!OPENAI_API_KEY) throw new Error('Missing OPENAI_API_KEY environment variable');
 if (!OPENAI_API_ENGINE) throw new Error('Missing OPENAI_API_ENGINE environment variable');
+if (!OPENAI_API_TAG) throw new Error('Missing OPENAI_API_TAG environment variable');
 if (!OPENAI_API_CONTEXT) throw new Error('Missing OPENAI_API_CONTEXT environment variable');
 if (!OPENAI_API_MAX_TOKENS) throw new Error('Missing OPENAI_API_MAX_TOKENS environment variable');
 if (!OPENAI_API_MAX_CONVERSATION_LENGTH)
@@ -53,7 +55,7 @@ const addPromptInput = (author, text, promptArray) => {
   return newPromptArray;
 };
 
-const parsePromptArray = (promptArray) => {
+export const parsePromptArray = (promptArray) => {
   let prompt = `${OPENAI_API_CONTEXT}\n\n`;
 
   promptArray.forEach((promptInput) => {
@@ -61,10 +63,10 @@ const parsePromptArray = (promptArray) => {
       prompt += 'Human: ';
       prompt += promptInput.text;
       prompt += '\n';
-      prompt += 'Bartender: ';
+      prompt += `${OPENAI_API_TAG}: `;
     }
 
-    if (promptInput.author === 'bartender') {
+    if (promptInput.author === 'openai') {
       prompt += promptInput.text;
       prompt += '\n';
     }
@@ -87,7 +89,7 @@ const processPrompt = async (prompt) => {
     bestOf: 1,
     n: 1,
     stream: false,
-    stop: ['\n', 'Human:', 'Bartender:'],
+    stop: ['\n', 'Human:', `${OPENAI_API_TAG}:`],
   });
 
   return response;
@@ -126,7 +128,7 @@ const talk = async (message, argument) => {
     finalText = replacePlaceholders(sanitizedText, script, message);
   }
 
-  conversation = addPromptInput('bartender', finalText, conversation); // Add AI response to the prompt array
+  conversation = addPromptInput('openai', finalText, conversation); // Add AI response to the prompt array
 
   clientState.conversations[textChannel.id] = conversation;
 
