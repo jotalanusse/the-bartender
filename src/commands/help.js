@@ -40,6 +40,14 @@ const help = async (message) => {
         value: 'Talk with The Bartender, and tell him about your meaningless problems',
       },
       {
+        name: `${COMMAND_PREFIX}cleartalk`,
+        value: 'Clear the conversation and start again',
+      },
+      {
+        name: `${COMMAND_PREFIX}dumptalk`,
+        value: 'Dump the conversation with the bartender',
+      },
+      {
         name: `${COMMAND_PREFIX}test`,
         value: 'Send a test message',
       },

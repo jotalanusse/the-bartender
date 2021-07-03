@@ -116,6 +116,16 @@ const script = {
     'Happiness is found in the little things<break time="500ms"/>, like in a shot of Vodka.',
     `Is somethnig wrong with your soul [USERNAME]? Do you want me to change it for you?`,
   ],
+  clearTalk: [
+    'Clear what, did you say something?',
+    'I already forgot everything.',
+    `Okay, let's start again.`,
+  ],
+  dumpTalk: [
+    'Here you have<break time="500ms"/>, mate.',
+    `But don't share this with anyone.`,
+    'Why would you want this?',
+  ],
   what: [
     `I can't really respond to that.`,
     `What you just said is outside of my comprehension<break time="500ms"/>, mate.`,
