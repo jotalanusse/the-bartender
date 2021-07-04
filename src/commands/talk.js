@@ -13,7 +13,8 @@ import { playVoiceMessage } from '../modules/voice';
 const {
   OPENAI_API_KEY,
   OPENAI_API_ENGINE,
-  OPENAI_API_TAG,
+  OPENAI_API_AI_TAG,
+  OPENAI_API_HUMAN_TAG,
   OPENAI_API_CONTEXT,
   OPENAI_API_MAX_TOKENS,
   OPENAI_API_MAX_CONVERSATION_LENGTH,
@@ -25,7 +26,8 @@ const {
 
 if (!OPENAI_API_KEY) throw new Error('Missing OPENAI_API_KEY environment variable');
 if (!OPENAI_API_ENGINE) throw new Error('Missing OPENAI_API_ENGINE environment variable');
-if (!OPENAI_API_TAG) throw new Error('Missing OPENAI_API_TAG environment variable');
+if (!OPENAI_API_AI_TAG) throw new Error('Missing OPENAI_API_AI_TAG environment variable');
+if (!OPENAI_API_HUMAN_TAG) throw new Error('Missing OPENAI_API_HUMAN_TAG environment variable');
 if (!OPENAI_API_CONTEXT) throw new Error('Missing OPENAI_API_CONTEXT environment variable');
 if (!OPENAI_API_MAX_TOKENS) throw new Error('Missing OPENAI_API_MAX_TOKENS environment variable');
 if (!OPENAI_API_MAX_CONVERSATION_LENGTH)
@@ -60,10 +62,10 @@ export const parsePromptArray = (promptArray) => {
 
   promptArray.forEach((promptInput) => {
     if (promptInput.author === 'human') {
-      prompt += 'Human: ';
+      prompt += `${OPENAI_API_HUMAN_TAG}: `;
       prompt += promptInput.text;
       prompt += '\n';
-      prompt += `${OPENAI_API_TAG}: `;
+      prompt += `${OPENAI_API_AI_TAG}: `;
     }
 
     if (promptInput.author === 'openai') {
@@ -89,7 +91,7 @@ const processPrompt = async (prompt) => {
     bestOf: 1,
     n: 1,
     stream: false,
-    stop: ['\n', 'Human:', `${OPENAI_API_TAG}:`],
+    stop: ['\n', `${OPENAI_API_HUMAN_TAG}:`, `${OPENAI_API_AI_TAG}:`],
   });
 
   return response;
