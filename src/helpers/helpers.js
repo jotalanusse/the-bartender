@@ -4,6 +4,7 @@ import { createHash } from 'crypto';
 
 /* Modules and files */
 import logger from './logger';
+import script from '../modules/script';
 
 /* Enviorment variables */
 const { COMMAND_MAX_LENGTH } = process.env;
@@ -31,12 +32,12 @@ export const randomArrayElement = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-export const replacePlaceholders = (text, script, message) => {
+export const replacePlaceholders = (text, message) => {
   logger.debug(`Replacing placeholders...`);
 
   const placeholders = {
     '[USERNAME]': () => message.author.username,
-    '[MENU_ITEM]': () => randomArrayElement(script),
+    '[MENU_ITEM]': () => randomArrayElement(script.menuItems),
     '[COMMAND_LENGTH]': () => message.content.length,
     '[COMMAND_MAX_LENGTH]': () => COMMAND_MAX_LENGTH,
   };

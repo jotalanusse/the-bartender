@@ -15,15 +15,15 @@ const join = async (message) => {
   // Command logic
   const scriptOptions = script.join;
   const scriptText = randomArrayElement(scriptOptions);
-  const sanitizedText = removeSSMLTags(scriptText);
-  const finalText = replacePlaceholders(sanitizedText, script, message);
+  const finalText = replacePlaceholders(scriptText, message);
+  const sanitizedText = removeSSMLTags(finalText);
 
   voiceConnection = await connectToVoiceChannel(voiceChannel);
   // voiceConnection = clientState.voiceConnections[voiceChannel.id]; // We have to update the current voiceConnection object
 
   await Promise.all([
-    sendTextMessage(textChannel, finalText),
-    playVoiceMessage(voiceConnection, scriptText),
+    sendTextMessage(textChannel, sanitizedText),
+    playVoiceMessage(voiceConnection, sanitizedText),
   ]);
 };
 

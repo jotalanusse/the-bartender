@@ -4,7 +4,7 @@ import Discord from 'discord.js';
 /* Modules and files */
 import logger from './helpers/logger';
 
-/* Client events */
+/* Events */
 import { loader as messageEventLoader } from './events/message';
 import { loader as readyEventLoader } from './events/ready';
 import { loader as voiceStateUpdateEventLoader } from './events/voiceStateUpdate';
@@ -19,6 +19,7 @@ const client = new Discord.Client();
 // Load modules
 const main = async (clientObject) => {
   logger.info('Entry point initialized');
+
   try {
     await clientObject.login(TOKEN); // Login the bot to Discord
 

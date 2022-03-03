@@ -1,3 +1,6 @@
+/* Packages */
+import Discord from 'discord.js';
+
 /* Modules and files */
 import clientState from '../state';
 import script from '../modules/script';
@@ -12,10 +15,10 @@ const repository = async (message) => {
   const textChannel = message.channel;
 
   // Command logic
-  const scriptOptions = script.test;
+  const scriptOptions = script.repository;
   const scriptText = randomArrayElement(scriptOptions);
-  const sanitizedText = removeSSMLTags(scriptText);
-  const finalText = replacePlaceholders(sanitizedText, script, message);
+  const finalText = replacePlaceholders(scriptText, message);
+  const sanitizedText = removeSSMLTags(finalText);
 
   const embedMessage = new Discord.MessageEmbed()
     .setColor('#4c2461')
