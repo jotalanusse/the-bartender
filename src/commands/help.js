@@ -21,8 +21,8 @@ const help = async (message) => {
   // Command logic
   const scriptOptions = script.help;
   const scriptText = randomArrayElement(scriptOptions);
-  const sanitizedText = removeSSMLTags(scriptText);
-  const finalText = replacePlaceholders(sanitizedText, script, message);
+  const finalText = replacePlaceholders(scriptText, message);
+  const sanitizedText = removeSSMLTags(finalText);
 
   const embedMessage = new Discord.MessageEmbed()
     .setColor('#4c2461')
@@ -35,18 +35,18 @@ const help = async (message) => {
         name: `${COMMAND_PREFIX}help, commands`,
         value: 'Display this menu',
       },
-      {
-        name: `${COMMAND_PREFIX}talk`,
-        value: 'Talk with The Bartender, and tell him about your meaningless problems',
-      },
-      {
-        name: `${COMMAND_PREFIX}cleartalk`,
-        value: 'Clear the conversation and start again',
-      },
-      {
-        name: `${COMMAND_PREFIX}dumptalk`,
-        value: 'Dump the conversation with the bartender',
-      },
+      // {
+      //   name: `${COMMAND_PREFIX}talk`,
+      //   value: 'Talk with The Bartender, and tell him about your meaningless problems',
+      // },
+      // {
+      //   name: `${COMMAND_PREFIX}cleartalk`,
+      //   value: 'Clear the conversation and start again',
+      // },
+      // {
+      //   name: `${COMMAND_PREFIX}dumptalk`,
+      //   value: 'Dump the conversation with the bartender',
+      // },
       {
         name: `${COMMAND_PREFIX}test`,
         value: 'Send a test message',

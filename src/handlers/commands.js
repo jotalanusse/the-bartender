@@ -5,9 +5,9 @@ import logger from '../helpers/logger';
 import helpCommand from '../commands/help';
 import tooLongCommand from '../commands/tooLong';
 import unknownCommand from '../commands/unknown';
-import talkCommand from '../commands/talk';
-import clearTalkCommand from '../commands/clearTalk';
-import dumpTalkCommand from '../commands/dumpTalk';
+// import talkCommand from '../commands/talk';
+// import clearTalkCommand from '../commands/clearTalk';
+// import dumpTalkCommand from '../commands/dumpTalk';
 import testCommand from '../commands/test';
 import joinCommand from '../commands/join';
 import repositoryCommand from '../commands/repository';
@@ -48,26 +48,6 @@ const commandHandler = async (message) => {
     case `${COMMAND_PREFIX}help`:
     case `${COMMAND_PREFIX}commands`: {
       await helpCommand(message);
-      break;
-    }
-
-    // Talk with the bot
-    case `${COMMAND_PREFIX}talk`:
-    case `${COMMAND_PREFIX}ai`:
-    case `${COMMAND_PREFIX}openai`: {
-      await talkCommand(message, argument);
-      break;
-    }
-
-    // Clear the conversation with the bot
-    case `${COMMAND_PREFIX}cleartalk`: {
-      await clearTalkCommand(message);
-      break;
-    }
-
-    // Dump the conversation with the bot
-    case `${COMMAND_PREFIX}dumptalk`: {
-      await dumpTalkCommand(message);
       break;
     }
 

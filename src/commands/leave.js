@@ -13,10 +13,10 @@ const leave = async (message) => {
   const textChannel = message.channel;
 
   // Command logic
-  const scriptOptions = script.join;
+  const scriptOptions = script.leave;
   const scriptText = randomArrayElement(scriptOptions);
-  const sanitizedText = removeSSMLTags(scriptText);
-  const finalText = replacePlaceholders(sanitizedText, script, message);
+  const finalText = replacePlaceholders(scriptText, message);
+  const sanitizedText = removeSSMLTags(finalText);
 
   await disconnectFromVoiceChannel(voiceChannel);
 
