@@ -34,8 +34,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "jest": "^26.1.0",
-    "nodemon": "^2.0.4",
-    "npm-check-updates": "^7.0.1",
+    "nodemon": "^2.0.20",
+    "npm-check-updates": "^16.7.4",
     "prettier": "^2.0.5"
   }
 }
